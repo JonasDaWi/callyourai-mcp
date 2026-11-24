@@ -1,0 +1,39 @@
+[project]
+name = "callyourai-mcp"
+version = "0.1.0"
+description = "MCP server for callyour.ai: let your coding agent sign up, buy credits, create talking avatars and render avatar videos"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "callyour.ai", email = "support@callyour.ai" }]
+keywords = ["mcp", "avatar", "livekit", "voice agent", "talking head", "claude", "cursor"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = ["mcp>=2.3,<3", "httpx>=0.27"]
+
+[project.scripts]
+callyourai-mcp = "callyourai_mcp.server:main"
+
+[project.urls]
+Homepage = "https://callyour.ai"
+Documentation = "https://api.callyour.ai/llms.txt"
+Source = "https://github.com/JonasDaWi/callyourai-mcp"
+Issues = "https://github.com/JonasDaWi/callyourai-mcp/issues"
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-asyncio>=0.24"]
+
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/callyourai_mcp"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
