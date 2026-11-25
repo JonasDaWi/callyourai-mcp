@@ -42,7 +42,7 @@ Needs [uv](https://docs.astral.sh/uv/). With an existing key, pass it in the env
 | `buy_credits(amount \| pack)` | A payment page URL to open or hand to the person who pays. |
 | `create_avatar(name, image_url \| image_path)` | Creates an avatar from one photo and waits until it is ready. |
 | `list_avatars()` | The account's avatars and their status. |
-| `render_video(avatar_id, audio_url \| audio_path, quality)` | Renders the avatar speaking an audio file; returns an MP4 download link. `quality`: `standard` (384 px) or `high` (512 px, slower). |
+| `render_video(avatar_id, audio_url \| audio_path, quality)` | Renders the avatar speaking an audio file; returns an MP4 download link. `quality`: `standard` (384 px), `high` (512 px, slower) or `studio` (768 px, slowest, audio up to 3 minutes). |
 | `get_video(video_id)` | Status of a rendered video, and its download link once ready. |
 | `get_usage()` | Recent sessions with billed seconds, and purchases. |
 | `setup_livekit_agent(avatar_id?)` | The install command and code to give a LiveKit voice agent this avatar. |

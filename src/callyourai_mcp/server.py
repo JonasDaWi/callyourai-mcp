@@ -137,14 +137,16 @@ async def render_video(
     avatar_id: str,
     audio_url: str | None = None,
     audio_path: str | None = None,
-    quality: Literal["standard", "high"] = "standard",
+    quality: Literal["standard", "high", "studio"] = "standard",
     wait_seconds: int = 300,
 ) -> dict:
     """Render the avatar speaking an audio file (WAV, MP3, M4A, OGG or FLAC, up to 10 minutes) as an MP4.
     Give audio_url (public) or audio_path (a local file). Billed per second of finished video. Waits until it is
     ready and returns download_url (valid one hour; the file is kept 7 days). quality "standard" (384 px) is ready
     in about 1.5x the audio length; "high" (512 px, more detail) waits for a gap between live calls and then takes
-    about 6x the audio length, so pass a larger wait_seconds for it, or call get_video later with the returned id.
+    about 6x the audio length; "studio" (768 px, the most detail, audio up to 3 minutes, priced higher) waits the
+    same way and then takes about 10x the audio length plus a few minutes. For high and studio pass a larger
+    wait_seconds, or call get_video later with the returned id. Prices per finished minute: get_balance.
     """
     if (audio_url is None) == (audio_path is None):
         raise ToolError("Give exactly one of audio_url or audio_path.")
