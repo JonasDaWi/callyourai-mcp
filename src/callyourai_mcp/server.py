@@ -182,7 +182,7 @@ async def setup_livekit_agent(avatar_id: str | None = None) -> dict:
             "The avatar joins the room as participant 'callyourai-avatar'; frontends show its video and play its audio.",
             "avatar.start raises callyourai.CallyouraiError with .code insufficient_credits, no_capacity, conflict "
             "(avatar not ready) or not_found.",
-            "A lost GPU worker is replaced automatically; the plugin emits avatar_lost and avatar_recovered.",
+            "A lost rendering server is replaced automatically; the plugin emits avatar_lost and avatar_recovered.",
         ],
         "guide": "https://api.callyour.ai/llms.txt",
         "key_file": str(credentials_path()),
