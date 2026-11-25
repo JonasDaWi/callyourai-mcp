@@ -142,7 +142,9 @@ async def render_video(
 ) -> dict:
     """Render the avatar speaking an audio file (WAV, MP3, M4A, OGG or FLAC, up to 10 minutes) as an MP4.
     Give audio_url (public) or audio_path (a local file). Billed per second of finished video. Waits until it is
-    ready and returns download_url (valid one hour; the file is kept 7 days). quality "high" is not available yet.
+    ready and returns download_url (valid one hour; the file is kept 7 days). quality "standard" (384 px) is ready
+    in about 1.5x the audio length; "high" (512 px, more detail) waits for a gap between live calls and then takes
+    about 6x the audio length, so pass a larger wait_seconds for it, or call get_video later with the returned id.
     """
     if (audio_url is None) == (audio_path is None):
         raise ToolError("Give exactly one of audio_url or audio_path.")
@@ -153,6 +155,13 @@ async def render_video(
         body["audio_base64"] = _file_base64(audio_path)
     created = await api.call("POST", "/v1/videos", body)
     return await _poll(f"/v1/videos/{created['id']}", ("ready", "failed"), max(0, min(wait_seconds, 1800)), 5.0)
+
+
+@server.tool()
+async def get_video(video_id: str) -> dict:
+    """The current state of a rendered video: status (queued, rendering, ready, failed), queue_position while
+    queued, and download_url once ready."""
+    return await api.call("GET", f"/v1/videos/{video_id}")
 
 
 @server.tool()

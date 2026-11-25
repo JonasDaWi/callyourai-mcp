@@ -71,7 +71,7 @@ async def test_every_tool_is_listed_with_a_description():
     async with Client(srv.server) as client:
         tools = {t.name: t for t in (await client.list_tools()).tools}
     assert set(tools) == {"sign_up", "get_balance", "buy_credits", "create_avatar", "list_avatars",
-                          "render_video", "get_usage", "setup_livekit_agent"}
+                          "render_video", "get_video", "get_usage", "setup_livekit_agent"}
     assert all(t.description for t in tools.values())
 
 
