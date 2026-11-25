@@ -20,7 +20,7 @@ from .api import Api, CallyouraiError, credentials_path, save_key
 
 INSTRUCTIONS = """callyour.ai gives LiveKit voice agents a real-time talking face, and renders avatar videos from audio.
 Typical order: sign_up (once) -> buy_credits (hand the URL to the human) -> create_avatar from a photo ->
-setup_livekit_agent for live calls, or render_video for an MP4. Credits are prepaid US dollars, billed per second.
+setup_livekit_agent for live calls, or render_video for an MP4. Credits are prepaid euros, billed per second.
 Full guide: https://api.callyour.ai/llms.txt"""
 
 LIVEKIT_SNIPPET = """from livekit.agents import AgentSession, room_io
@@ -78,26 +78,27 @@ async def sign_up(email: str, account_name: str | None = None) -> dict:
         "api_key": result["api_key"],
         "saved_to": str(path),
         "do_next": "Add CALLYOURAI_API_KEY=<api_key> to the project's .env (never commit it), then buy_credits.",
-        "balance_usd": result.get("balance_usd"),
+        "balance": result.get("balance", result.get("balance_usd")),
+        "currency": result.get("currency", "EUR"),
     }
 
 
 @server.tool()
 async def get_balance() -> dict:
-    """The account's credit balance in US dollars, the price per minute of each avatar tier, and the credit packs."""
+    """The account's credit balance in euros, the price per minute of each avatar tier, and the credit packs."""
     return await api.call("GET", "/v1/balance")
 
 
 @server.tool()
-async def buy_credits(amount_usd: float | None = None, pack: str | None = None) -> dict:
-    """Create a payment page for prepaid credits. Give amount_usd (5 to 10000) or a pack id from get_balance.
+async def buy_credits(amount: float | None = None, pack: str | None = None) -> dict:
+    """Create a payment page for prepaid credits. Give amount in euros (5 to 10000) or a pack id from get_balance.
 
     Returns checkout_url: open it or hand it to the human who pays. The balance rises a few seconds after
     payment; check with get_balance. Bigger purchases get bonus credit.
     """
-    if (amount_usd is None) == (pack is None):
-        raise ToolError("Give exactly one of amount_usd or pack.")
-    body = {"amount_usd": amount_usd} if amount_usd is not None else {"pack": pack}
+    if (amount is None) == (pack is None):
+        raise ToolError("Give exactly one of amount (euros) or pack.")
+    body = {"amount": amount} if amount is not None else {"pack": pack}
     return await api.call("POST", "/v1/credits/checkout", body)
 
 
@@ -156,7 +157,7 @@ async def render_video(
 
 @server.tool()
 async def get_usage() -> dict:
-    """Recent live sessions with billed seconds and dollars, and the account's purchases."""
+    """Recent live sessions with billed seconds and euros, and the account's purchases."""
     return await api.call("GET", "/v1/usage")
 
 

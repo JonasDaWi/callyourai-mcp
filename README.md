@@ -38,8 +38,8 @@ Needs [uv](https://docs.astral.sh/uv/). With an existing key, pass it in the env
 | Tool | What it does |
 |---|---|
 | `sign_up(email, account_name?)` | Creates an account and returns an API key. The key is saved to `~/.config/callyourai/credentials.json` (mode 600). |
-| `get_balance()` | Balance in US dollars, prices per minute, credit packs. |
-| `buy_credits(amount_usd \| pack)` | A payment page URL to open or hand to the person who pays. |
+| `get_balance()` | Balance in euros, prices per minute, credit packs. |
+| `buy_credits(amount \| pack)` | A payment page URL to open or hand to the person who pays. |
 | `create_avatar(name, image_url \| image_path)` | Creates an avatar from one photo and waits until it is ready. |
 | `list_avatars()` | The account's avatars and their status. |
 | `render_video(avatar_id, audio_url \| audio_path)` | Renders the avatar speaking an audio file; returns an MP4 download link. |

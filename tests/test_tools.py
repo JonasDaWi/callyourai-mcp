@@ -24,14 +24,14 @@ class FakeApi:
         self.requests.append((request.method, request.url.path, body, request.headers.get("authorization")))
         path = request.url.path
         if path == "/v1/signup":
-            return httpx.Response(201, json={"api_key": "cyai_test_key", "account_id": "acc-1", "balance_usd": 0})
+            return httpx.Response(201, json={"api_key": "cyai_test_key", "account_id": "acc-1", "balance": 0, "currency": "EUR"})
         if path == "/v1/balance":
-            return httpx.Response(200, json={"balance_usd": 4.2})
+            return httpx.Response(200, json={"balance": 4.2, "currency": "EUR"})
         if path == "/v1/credits/checkout":
-            if body.get("amount_usd") == 1:
-                return httpx.Response(422, json={"error": {"code": "bad_request", "message": "At least $5.",
+            if body.get("amount") == 1:
+                return httpx.Response(422, json={"error": {"code": "bad_request", "message": "At least €5.",
                                                            "next": {"call": "GET /v1/balance"}}})
-            return httpx.Response(200, json={"checkout_url": "https://pay.example/1", "pay_usd": 10})
+            return httpx.Response(200, json={"checkout_url": "https://pay.example/1", "pay": 10})
         if path == "/v1/avatars" and request.method == "POST":
             return httpx.Response(202, json={"id": "av-1", "status": "processing"})
         if path == "/v1/avatars/av-1":
@@ -92,7 +92,7 @@ async def test_without_a_key_the_tool_says_to_sign_up(fake):
 
 async def test_api_errors_carry_the_next_hint(fake, monkeypatch):
     monkeypatch.setenv("CALLYOURAI_API_KEY", "k")
-    result = await call("buy_credits", {"amount_usd": 1})
+    result = await call("buy_credits", {"amount": 1})
     assert result.is_error and "GET /v1/balance" in result.content[0].text
 
 
