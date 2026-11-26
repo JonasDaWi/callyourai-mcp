@@ -110,6 +110,13 @@ async def test_render_video_returns_the_download_link(fake, monkeypatch):
     assert out["download_url"] == "https://dl/v.mp4"
 
 
+async def test_render_video_passes_gestures_on(fake, monkeypatch):
+    monkeypatch.setenv("CALLYOURAI_API_KEY", "k")
+    actions = [{"at": 0.5, "action": "wave"}]
+    await call("render_video", {"avatar_id": "av-1", "audio_url": "https://x/a.wav", "actions": actions})
+    assert fake.requests[0][2]["actions"] == actions
+
+
 async def test_setup_livekit_agent_fills_in_the_avatar():
     out = payload(await call("setup_livekit_agent", {"avatar_id": "av-9"}))
     assert out["install"] == "pip install livekit-plugins-callyourai" and 'avatar_id="av-9"' in out["code"]
