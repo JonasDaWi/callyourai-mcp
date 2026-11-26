@@ -85,7 +85,10 @@ async def sign_up(email: str, account_name: str | None = None) -> dict:
 
 @server.tool()
 async def get_balance() -> dict:
-    """The account's credit balance in euros, the price per minute of each avatar tier, and the credit packs."""
+    """The account's credit balance in euros, the price per minute of each avatar tier, and the credit packs.
+
+    expires_at: when the balance lapses if the account neither buys nor uses credits until then (null if
+    there is nothing to lapse). Credits lapse after 12 months without a purchase or use."""
     return await api.call("GET", "/v1/balance")
 
 
